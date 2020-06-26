@@ -9,7 +9,7 @@ const contentSchema = new mongoose.Schema({
     type: {},
     required: true,
   },
-  mission: {
+  jointhemission: {
     type: {},
     required: true,
   },
@@ -21,15 +21,15 @@ const contentSchema = new mongoose.Schema({
     type: {},
     required: true,
   },
-  about: {
+  About: {
     type: {},
     required: true,
   },
-  footer: {
+  Footer: {
     type: {},
     required: true,
   },
-  manager: {
+  communityManager: {
     type: {},
     required: true,
   },
