@@ -12,6 +12,14 @@ router.get("/", async (req, res) => {
     });
 });
 
+router.post("/", async (req, res) => {
+  const data = req.body;
+  const content = new Content({data});
+  await content.save()
+  .then((result) => res.json(result))
+  .catch(err => res.status(500).json('Error: ' + err));
+})
+
 router.put("/:id", async (req, res) => {
   const id = req.params.id;
   const data = req.body;
