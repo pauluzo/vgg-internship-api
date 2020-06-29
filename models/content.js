@@ -37,6 +37,8 @@ const contentSchema = new mongoose.Schema({
     type: {},
     required: true,
   },
+}, {
+  timestamps: true
 });
 
 const Content = mongoose.model("content", contentSchema);

@@ -15,7 +15,6 @@ router.get("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-  const update = new Content(data);
 
   console.log("request received");
 
