@@ -12,10 +12,11 @@ router.get("/", async (req, res) => {
     });
 });
 
-router.post("/", async (req, res) => {
+router.post("/", (req, res) => {
   const data = req.body;
   const content = new Content(data);
-  await content.save()
+
+  content.save()
   .then((result) => res.json(result))
   .catch(err => res.status(500).json('Error: ' + err));
 })
