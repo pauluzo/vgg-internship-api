@@ -28,7 +28,7 @@ router.put("/:id", async (req, res) => {
   console.log("request received");
 
   Content.findByIdAndUpdate(id, data)
-  .then(() => res.json(data))
+  .then((oldData) => res.json({oldData, [newData]: data}))
   .catch(err => res.status(400).json('Error: ' + err));
 })
 
