@@ -24,10 +24,11 @@ router.post("/", (req, res) => {
 router.put("/:id", async (req, res) => {
   const id = req.params.id;
   const data = req.body;
+  const newData = {...data, isLoggedIn: false}
 
   console.log("request received");
 
-  Content.findByIdAndUpdate(id, data)
+  Content.findByIdAndUpdate(id, newData)
   .then((_) => res.json(data))
   .catch(err => res.status(400).json('Error: ' + err));
 })

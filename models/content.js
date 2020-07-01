@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const contentSchema = new mongoose.Schema({
+  isLoggedIn: {
+    type: Boolean,
+    required: true
+  },
   adminDetails: {
     type: {},
     required: true,
