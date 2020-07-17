@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Intern = require("../models/intern");
 const { validationResult } = require("express-validator");
+const xl = require('excel4node');
 
 router.post("/", async (req, res) => {
   const errors = validationResult(req);
@@ -56,5 +57,87 @@ router.post("/", async (req, res) => {
     }
   }
 });
+
+router.get('/', async (req, res) => {
+  let internMap = await Intern.find();
+  let interns = internMap.map((internData) => {
+    let newData = {
+      first_name: internData.firstName,
+      last_name: internData.lastName,
+      email: internData.email,
+      phone_number: internData.phoneNumber,
+      gender: internData.gender,
+      track: internData.track,
+      proficiency: internData.proficiency,
+      city: internData.city,
+      state: internData.state,
+      country: internData.country,
+      D_0_B: internData.dateOfBirth,
+      Reg_Date: internData.registerationDate.toString(),
+    }
+
+    return newData;
+  })
+
+  let wb = new xl.Workbook();
+  let ws = wb.addWorksheet('VGG Internship Reg List');
+
+  let style = wb.createStyle({
+    font: {
+      color: "#000000",
+      size: 12,
+    }
+  });
+
+  const formatToExcel = async() => {
+    let objectTemplate = interns[0];
+    let templateKeys = Object.keys(objectTemplate);
+
+    async function cellLoop() {
+      for(let i = 0; i < templateKeys.length; i++) {
+        let key = templateKeys[i];
+        ws.cell(1, i + 1)
+        .string(key)
+        .style(style);
+
+        for(a = 0; a < interns.length; a++) {
+          ws.cell(a + 2, i + 1)
+          .string(interns[a][key])
+          .style(style);
+        }
+      }
+    }
+
+    cellLoop()
+    .then(_ => {
+      return "excel sheet mapping, done";
+    })
+    .catch(err => {
+      return err;
+    })
+  }
+
+  const processRegistrationData = () => {
+    let errorData = {};
+    if(interns && interns.length > 0) {
+      formatToExcel()
+      .then(_ =>  {
+        wb.write('RegistrationData.xlsx', res);
+      })
+      .catch(error => {
+        errorData = {error: error}
+        res.status(500).json('Error ' + errorData);
+      })
+    } else if(interns && interns.length <= 0) {
+      errorData = {error: "There is no registered user yet."}
+      res.status(500).json('Error ' + errorData);
+    } else {
+      errorData = {error: "Failed to fetch registtation details. Please try again."}
+      res.status(500).json('Error ' + errorData);
+    }
+  }
+
+  processRegistrationData();
+})
 
 module.exports = router;
